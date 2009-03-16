@@ -1,0 +1,9 @@
+Slartibartfast::Configuration.configure do |c|
+  c.server "irc.freenode.net", 6667
+  c.nick "Slartibartfast"
+  c.username "slartibartfast"
+  c.realname "Slartibartfast v0.1"
+  c.prefix "."
+  
+  c.load :loader
+end
