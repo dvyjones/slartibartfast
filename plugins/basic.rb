@@ -1,15 +1,19 @@
-load 'plugin.rb'
+load 'slartibartfast/plugin.rb'
 
-class BasicPlugin < Plugin
+class BasicPlugin < Slartibartfast::Plugin
   def join(channel)
-    @bot.send("JOIN #{channel}") if @who == "Dvyjones"
+    @bot.send("JOIN #{channel}") if @who == @bot.config[:owner]
   end
   
-  def part(channel)
-    send_part(channel) if @who == "Dvyjones"
+  def part(channel, *message)
+    if channel[0,1] == "#"
+      send_part(channel, message.join(" ")) if @who == @bot.config[:owner]
+    else
+      send_part(channel, message.join(" ")) if @who == @bot.config[:owner]
+    end
   end
   
   def raw(*rawstuff)
-    @bot.send(rawstuff.join(" ")) if @who == "Dvyjones"
+    @bot.send(rawstuff.join(" ")) if @who == @bot.config[:owner]
   end
 end

@@ -1,0 +1,1 @@
+load 'slartibartfast/plugin.rb'

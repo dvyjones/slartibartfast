@@ -4,6 +4,7 @@ Slartibartfast::Configuration.configure do |c|
   c.username "slartibartfast"
   c.realname "Slartibartfast v0.1"
   c.prefix "."
+  c.owner "YourNick"
   
   c.load :loader
 end

@@ -2,13 +2,16 @@ require 'socket'
 
 require 'slartibartfast/configuration'
 require 'config/config'
+require 'slartibartfast/user'
 
 module Slartibartfast
   class Bot
+    attr_reader :config
     def initialize
       @config = Configuration.configuration
       @plugins = {}
       @commands = {}
+      @private_commands = {}
       autoload()
     end
     
@@ -28,6 +31,10 @@ module Slartibartfast
       for command in @plugins[plugin.to_sym].commands
         @commands[command] = @plugins[plugin.to_sym]
         puts "-!- Loaded the command #{command} and bound to plugin #{camelcased}Plugin"
+      end
+      for private_command in @plugins[plugin.to_sym].private_commands
+        @private_commands[command] = @plugins[plugin.to_sym]
+        puts "-!- Loaded the private command #{command} and bound to plugin #{camelcased}Plugin"
       end
     end
     
@@ -58,6 +65,12 @@ module Slartibartfast
         caller, channel, message = [$1, $2, $3]
         if @commands.has_key?(message.split(/ /).first)
           @commands[message.split(/ /).first].call(caller, channel, message)
+        end
+      elsif /:([\S]+)\sPRIVMSG\s#{@config[:nick]} :(.*)/ =~ line.chomp
+        caller, message = [$1, $2]
+        channel = caller.split('!').first
+        if @private_commands.has_key?(message.split(/ /).first)
+          @private_commands[message.split(/ /).first].call(caller, channel, message)
         end
       elsif line =~ /^:.*? 422/
         @config[:on_connect].each do |c|
