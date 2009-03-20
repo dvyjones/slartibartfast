@@ -1,7 +1,8 @@
 load 'slartibartfast/user.rb'
 
 module Slartibartfast
-  class Plugin; @@private_methods = Hash.new {|h,k| h[k] = [] }
+  class Plugin
+    @@private_commands = Hash.new {|h,k| h[k] = [] }
     
     def initialize(bot)
       @bot = bot
