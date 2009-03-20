@@ -1,2 +1,3 @@
 plugins/identica.rb
 config/config.rb
+config/user.db

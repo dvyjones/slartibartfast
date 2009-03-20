@@ -1,33 +1,26 @@
 load 'slartibartfast/user.rb'
 
 module Slartibartfast
-  class Plugin
+  class Plugin; @@private_methods = Hash.new {|h,k| h[k] = [] }
+    
     def initialize(bot)
       @bot = bot
-      @@private_commands ||= {} 
-      @@private_commands[self.class.to_s] ||= []
     end
     
     def self.private_command(*commands)
-      @@private_commands ||= {} 
-      @@private_commands[self.class.to_s] ||= []
       commands.each do |command|
-        @@private_commands[self.class.to_s] << command.to_s
-        puts @@private_commands[self.class.to_s].join(",")
+        @@private_commands[self.class] << command.to_s
+        puts @@private_commands[self.class].join(",")
       end
     end
     
     def commands
-      @@private_commands ||= {}
-      @@private_commands[self.class.to_s] ||= [] 
-      puts "DEBUG: Private methods: #{@@private_commands[self.class.to_s].join(", ")}"
-      (self.methods - @@private_commands[self.class.to_s]) - Plugin.new(nil).methods
+      puts "DEBUG: Private methods: #{@@private_commands[self.class].join(", ")}"
+      (self.methods - @@private_commands[self.class]) - Plugin.instance_methods
     end
     
     def private_commands
-      @@private_commands ||= {} 
-      @@private_commands[self.class.to_s] ||= []
-      @@private_commands[self.class.to_s]
+      @@private_commands[self.class]
     end
     
     def reply(text)
